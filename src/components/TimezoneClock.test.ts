@@ -11,12 +11,14 @@ describe('TimezoneClock.vue', () => {
     vi.useRealTimers()
   })
 
-  it('displays initial time correctly based on timezone', () => {
+  it('displays initial time correctly based on timezone', async () => {
     const wrapper = mount(TimezoneClock, {
       props: {
         timezone: 'UTC'
       }
     })
+
+    await wrapper.vm.$nextTick()
 
     const displayedTime = wrapper.text()
     const actualTime = new Intl.DateTimeFormat('en-US', {
