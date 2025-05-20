@@ -7,6 +7,7 @@ import globals from 'globals'
 export default [
   {
     files: ['**/*.{js,mjs,cjs,ts,vue}'],
+    ignores: ['dist', 'node_modules'],
     languageOptions: {
       parser: vueParser,
       parserOptions: {

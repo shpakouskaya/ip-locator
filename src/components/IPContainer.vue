@@ -4,6 +4,7 @@ import IPInputRow from './IPInputRow.vue'
 import { useIPStore } from '../store/IPStore.ts'
 
 const emit = defineEmits<{
+  // eslint-disable-next-line no-unused-vars
   (e: 'close'): void
 }>()
 
@@ -21,7 +22,6 @@ defineExpose({
   handleAddClick,
   handleCloseClick
 })
-
 </script>
 
 <template>

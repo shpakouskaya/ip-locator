@@ -76,7 +76,6 @@ defineExpose({
   handleRemove,
   handleBlur
 })
-
 </script>
 
 <template>

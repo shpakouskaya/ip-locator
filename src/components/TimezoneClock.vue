@@ -9,7 +9,6 @@ const time = ref('')
 
 let timer: ReturnType<typeof setInterval> | null = null
 
-
 function getFormattedTime(timezone: string | undefined | null): string {
   return new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
