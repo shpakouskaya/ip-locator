@@ -40,7 +40,7 @@ watch(
 <style scoped>
 .timezone-clock {
   font-size: 0.95rem;
-  align-self: center;
-  width: 70px;
+  min-width: 5rem;
+  margin-top: 0.5rem;
 }
 </style>

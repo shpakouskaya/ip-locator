@@ -155,18 +155,19 @@ defineExpose({
 .ip-input-data {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  min-width: 18rem;
 }
 
 .flag {
-  align-self: center;
+  margin-top: 0.5rem;
 }
 
 .row-data {
   display: flex;
+  margin-left: auto;
 }
 
 .delete-row {
-  justify-self: end;
+  margin-left: auto;
 }
 </style>
