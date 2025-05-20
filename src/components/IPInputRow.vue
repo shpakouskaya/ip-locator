@@ -1,81 +1,77 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
-import TimezoneClock from './TimezoneClock.vue'
-import { useIPStore } from '../store/IPStore.ts'
-import { isValidIp } from '../shared/utils/validation.ts'
-import { fetchIpLocation } from '../api/ipSearch.ts'
-import { useMessage } from 'naive-ui'
-import { TrashOutline } from '@vicons/ionicons5'
+import TimezoneClock from './TimezoneClock.vue';
+import { useIPStore } from '../store/IPStore.ts';
+import { validateIp } from '../shared/utils/validation.ts';
+import { fetchIpLocation } from '../api/ipSearch.ts';
+import { useMessage } from 'naive-ui';
+import { TrashOutline } from '@vicons/ionicons5';
 
 const props = defineProps<{
-  id: number
-  displayIndex: number
-}>()
-const ipStore = useIPStore()
-const message = useMessage()
-let lastQueriedIp = ''
+  id: number;
+  displayIndex: number;
+}>();
+const ipStore = useIPStore();
+const message = useMessage();
+let lastQueriedIp: string | undefined;
 
-const record = computed(() => ipStore.records.get(props.id))
+const record = computed(() => ipStore.records.get(props.id));
 
 function handleInput(value: string) {
-  const sanitized = value.replace(/[^0-9.]/g, '')
-  ipStore.updateIp(props.id, sanitized)
+  const sanitized = value.replace(/[^0-9.]/g, '');
+  ipStore.updateIp(props.id, sanitized);
 }
 
 function handleRemove() {
-  ipStore.removeRecord(props.id)
+  ipStore.removeRecord(props.id);
 }
 
 async function handleBlur() {
-  const ip = record.value?.ip?.trim()
+  const ip = record.value!.ip.trim();
+  const validation = validateIp(ip);
 
-  if (!ip) {
-    ipStore.setError(props.id, 'Please enter an IP address')
-    return
+  if (!validation.valid) {
+    if (validation.shouldReset) {
+      ipStore.setResult(props.id, {
+        city: '',
+        country: '',
+        countryEmoji: '',
+        timezone: ''
+      });
+    }
+    ipStore.setError(props.id, validation.error!);
+    lastQueriedIp = '';
+    return;
   }
 
-  if (!isValidIp(ip)) {
-    ipStore.setResult(props.id, {
-      city: '',
-      country: '',
-      countryEmoji: '',
-      timezone: ''
-    })
-    ipStore.setError(props.id, 'Invalid format of IP address')
-    return
-  }
+  if (ip === lastQueriedIp) return;
+  lastQueriedIp = ip;
 
-  if (ip === lastQueriedIp) {
-    return
-  }
-
-  lastQueriedIp = ip
-
-  ipStore.setError(props.id, null)
-  ipStore.setLoading(props.id, true)
+  ipStore.setError(props.id, null);
+  ipStore.setLoading(props.id, true);
 
   try {
-    const result = await fetchIpLocation(ip)
+    const result = await fetchIpLocation(ip);
     ipStore.setResult(props.id, {
       ip: result.ip,
       city: result.city,
       country: result.country,
       countryEmoji: result.countryEmoji,
       timezone: result.timezone
-    })
-    message.success(`IP Location for ${ip} is fetched successfully`)
+    });
+    message.success(`IP Location for ${ip} is fetched successfully`);
   } catch {
     ipStore.setResult(props.id, {
       city: '',
       country: '',
       countryEmoji: '',
       timezone: ''
-    })
-    ipStore.setError(props.id, 'Failed to fetch data')
-    message.error(`Failed to fetch data for ${ip}`)
+    });
+    ipStore.setError(props.id, 'Failed to fetch data');
+    message.error(`Failed to fetch data for ${ip}`);
   } finally {
-    ipStore.setLoading(props.id, false)
+    ipStore.setLoading(props.id, false);
   }
 }
 
@@ -83,15 +79,17 @@ defineExpose({
   handleInput,
   handleRemove,
   handleBlur
-})
+});
 </script>
 
 <template>
+  <!-- Index of row -->
   <li class="ip-row">
     <div class="ip-index">
       {{ props.displayIndex }}
     </div>
 
+    <!--  Input and error message  -->
     <div class="ip-input-data">
       <n-input
         :value="record?.ip"
@@ -106,10 +104,12 @@ defineExpose({
       </n-text>
     </div>
 
+    <!--  Loader  -->
     <template v-if="record?.loading">
       <n-spin />
     </template>
 
+    <!--  Data from API and delete button  -->
     <template class="row-data" v-else>
       <n-tooltip v-if="record?.country" trigger="hover">
         <template #trigger>
@@ -137,6 +137,7 @@ defineExpose({
   align-items: flex-start;
   width: 100%;
   gap: 1rem;
+  min-height: 3.5rem;
 }
 
 .ip-index {

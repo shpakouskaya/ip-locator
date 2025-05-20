@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import { AddSharp } from '@vicons/ionicons5'
-import IPInputRow from './IPInputRow.vue'
-import { useIPStore } from '../store/IPStore.ts'
+import { AddSharp } from '@vicons/ionicons5';
+import IPInputRow from './IPInputRow.vue';
+import { useIPStore } from '../store/IPStore.ts';
+import { computed } from 'vue';
 
 const emit = defineEmits<{
   // eslint-disable-next-line no-unused-vars
-  (e: 'close'): void
-}>()
+  (e: 'close'): void;
+}>();
 
-const ipStore = useIPStore()
+const ipStore = useIPStore();
+const records = computed(() => Array.from(ipStore.records.entries()));
 
 const handleAddClick = () => {
-  ipStore.addRecord()
-}
+  ipStore.addRecord();
+};
 
 const handleCloseClick = () => {
-  emit('close')
-}
+  emit('close');
+};
 
 defineExpose({
   handleAddClick,
   handleCloseClick
-})
+});
 </script>
 
 <template>
@@ -49,12 +51,7 @@ defineExpose({
 
     <!-- List of IPs -->
     <transition-group name="fade-input" tag="ul" class="ip-list">
-      <IPInputRow
-        v-for="([id, _], index) in Array.from(ipStore.records.entries())"
-        :key="id"
-        :id="id"
-        :displayIndex="index + 1"
-      />
+      <IPInputRow v-for="([id], index) in records" :key="id" :id="id" :displayIndex="index + 1" />
     </transition-group>
   </n-card>
 </template>
@@ -74,7 +71,7 @@ defineExpose({
 .ip-list {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   height: 50vh;
   padding: 0;
   margin-top: 1rem;

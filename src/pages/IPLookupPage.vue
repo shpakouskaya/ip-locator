@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import IPContainer from '../components/IPContainer.vue'
-import { useIPStore } from '../store/IPStore.ts'
-import { useMessage } from 'naive-ui'
+import { ref } from 'vue';
+import IPContainer from '../components/IPContainer.vue';
+import { useIPStore } from '../store/IPStore.ts';
+import { useMessage } from 'naive-ui';
 
-const ipStore = useIPStore()
-const message = useMessage()
-const isVisible = ref(false)
+const ipStore = useIPStore();
+const message = useMessage();
+const isVisible = ref(false);
 
 function handleClose() {
-  isVisible.value = false
-  ipStore.clearAll()
-  message.warning('IP list has been cleared.')
+  isVisible.value = false;
+  ipStore.clearAll();
+  message.warning('IP list has been cleared.');
 }
 
 function handleOpen() {
-  isVisible.value = true
+  isVisible.value = true;
 }
 // For tests
 defineExpose({
   isVisible,
   handleOpen
-})
+});
 </script>
 
 <template>

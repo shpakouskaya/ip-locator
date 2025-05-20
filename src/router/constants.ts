@@ -7,4 +7,4 @@ export const ROUTES = {
     name: 'NotFound',
     path: '/:pathMatch(.*)*'
   }
-} as const
+} as const;

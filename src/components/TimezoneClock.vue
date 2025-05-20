@@ -1,37 +1,36 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { createTimeFormatter } from '../shared/utils/timeFormatter.ts';
 
 const props = defineProps<{
-  timezone: string | undefined | null
-}>()
+  timezone: string | undefined | null;
+}>();
 
-const time = ref('')
-let timer: ReturnType<typeof setInterval> | null = null
-
-const effectiveTimezone = computed(() => props.timezone || 'UTC')
+const time = ref('');
+let timer: ReturnType<typeof setInterval> | null = null;
+let formatter = createTimeFormatter(props.timezone);
 
 function updateTime() {
-  time.value = new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZone: effectiveTimezone.value,
-    hour12: false
-  }).format(new Date())
+  time.value = formatter.format(new Date());
 }
 
 onMounted(() => {
-  updateTime()
-  timer = setInterval(updateTime, 1000)
-})
+  updateTime();
+  timer = setInterval(updateTime, 1000);
+});
 
 onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
-})
+  if (timer) clearInterval(timer);
+});
 
-watch(effectiveTimezone, () => {
-  updateTime()
-})
+watch(
+  () => props.timezone,
+  (newTz) => {
+    formatter = createTimeFormatter(newTz);
+    updateTime();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

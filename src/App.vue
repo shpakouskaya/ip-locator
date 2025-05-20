@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { NConfigProvider } from 'naive-ui'
-import { themeOverrides } from './plugins/naive-ui.ts'
+import { NConfigProvider } from 'naive-ui';
+import { themeOverrides } from './plugins/naive-ui.ts';
 </script>
 
 <template>

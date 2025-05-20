@@ -1,8 +1,8 @@
-import vue from 'eslint-plugin-vue'
-import vueParser from 'vue-eslint-parser'
-import tseslint from 'typescript-eslint'
-import js from '@eslint/js'
-import globals from 'globals'
+import vue from 'eslint-plugin-vue';
+import vueParser from 'vue-eslint-parser';
+import tseslint from 'typescript-eslint';
+import js from '@eslint/js';
+import globals from 'globals';
 
 export default [
   {
@@ -22,16 +22,12 @@ export default [
       '@typescript-eslint': tseslint
     },
     rules: {
-      // Базовые правила JS
       ...js.configs.recommended.rules,
-      // Рекомендованные TS правила
       ...tseslint.configs.recommended[0].rules,
-      // Vue flat essential
       ...vue.configs['flat/essential'].rules,
 
-      // Кастомные правила (можешь править)
       'vue/multi-word-component-names': 'off',
       '@typescript-eslint/no-explicit-any': 'off'
     }
   }
-]
+];
