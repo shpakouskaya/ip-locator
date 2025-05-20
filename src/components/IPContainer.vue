@@ -81,9 +81,6 @@ defineExpose({
   overflow-y: auto;
 }
 
-.fade-input-enter-active {
-  transition: all 0.3s ease;
-}
 .fade-input-enter-from {
   opacity: 0;
   transform: translateY(-10px);
@@ -91,5 +88,15 @@ defineExpose({
 .fade-input-enter-to {
   opacity: 1;
   transform: translateY(0);
+}
+
+.fade-input-enter-active,
+.fade-input-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-input-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>
