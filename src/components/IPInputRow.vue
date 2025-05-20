@@ -64,6 +64,11 @@ async function handleBlur() {
     })
     message.success(`IP Location for ${ip} is fetched successfully`)
   } catch {
+    ipStore.setResult(props.id, {
+      country: '',
+      countryEmoji: '',
+      timezone: ''
+    })
     ipStore.setError(props.id, 'Failed to fetch data')
     message.error(`Failed to fetch data for ${ip}`)
   } finally {
