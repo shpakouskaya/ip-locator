@@ -8,12 +8,6 @@ const ipStore = useIPStore()
 const message = useMessage()
 const isVisible = ref(false)
 
-// For tests
-defineExpose({
-  isVisible,
-  handleOpen
-})
-
 function handleClose() {
   isVisible.value = false
   ipStore.clearAll()
@@ -23,6 +17,11 @@ function handleClose() {
 function handleOpen() {
   isVisible.value = true
 }
+// For tests
+defineExpose({
+  isVisible,
+  handleOpen
+})
 </script>
 
 <template>

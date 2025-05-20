@@ -28,19 +28,7 @@ describe('IPLookupPage.vue', () => {
     expect(wrapper.find('button').text()).toBe('Open IP Lookup')
   })
 
-  it('shows IPContainer when isVisible is true', async () => {
-    const wrapper = mountWithNaiveAndPinia()
-
-    const page = wrapper.findComponent(IPLookupPage)
-
-    page.vm.isVisible = true
-    await page.vm.$nextTick()
-
-    expect(page.findComponent(IPContainer).exists()).toBe(true)
-    expect(page.find('.placeholder').exists()).toBe(false)
-  })
-
-  it('handleOpen sets isVisible to true', async () => {
+  it('handleOpen sets isVisible and IPContainer to true', async () => {
     const wrapper = mountWithNaiveAndPinia()
     const page = wrapper.findComponent(IPLookupPage)
 

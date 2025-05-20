@@ -1,60 +1,62 @@
 import { defineStore } from 'pinia'
 
 export interface IpRecord {
-  id: number
   ip: string
   loading: boolean
   error: string | null
   country: string
+  city: string
   countryEmoji: string
   timezone: string
 }
 
 export const useIPStore = defineStore('IPStore', {
   state: () => ({
-    records: [] as IpRecord[],
+    records: new Map<number, IpRecord>(),
     nextId: 1
   }),
 
   actions: {
     addRecord() {
-      this.records.push({
-        id: this.nextId++,
+      const id = this.nextId++
+      this.records.set(id, {
         ip: '',
         loading: false,
         error: null,
         country: '',
+        city: '',
         countryEmoji: '',
         timezone: ''
       })
     },
 
     removeRecord(id: number) {
-      this.records = this.records.filter((r) => r.id !== id)
+      this.records.delete(id)
     },
 
     updateIp(id: number, ip: string) {
-      const record = this.records.find((r) => r.id === id)
+      const record = this.records.get(id)
       if (record) record.ip = ip
     },
 
     setLoading(id: number, isLoading: boolean) {
-      const record = this.records.find((r) => r.id === id)
+      const record = this.records.get(id)
       if (record) record.loading = isLoading
     },
 
-    setError(id: number, error: string) {
-      const record = this.records.find((r) => r.id === id)
+    setError(id: number, error: string | null) {
+      const record = this.records.get(id)
       if (record) record.error = error
     },
 
     setResult(
       id: number,
-      result: { ip?: string; country: string; countryEmoji: string; timezone: string }
+      result: { ip?: string; city: string; country: string; countryEmoji: string; timezone: string }
     ) {
-      const record = this.records.find((r) => r.id === id)
+      const record = this.records.get(id)
       if (record) {
         record.country = result.country
+        record.city = result.city
         record.countryEmoji = result.countryEmoji
         record.timezone = result.timezone
         record.error = null
@@ -63,7 +65,8 @@ export const useIPStore = defineStore('IPStore', {
     },
 
     clearAll() {
-      this.records = []
+      this.records.clear()
+      this.nextId = 1
     }
   }
 })

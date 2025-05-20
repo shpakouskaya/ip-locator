@@ -50,9 +50,9 @@ defineExpose({
     <!-- List of IPs -->
     <transition-group name="fade-input" tag="ul" class="ip-list">
       <IPInputRow
-        v-for="(record, index) in ipStore.records"
-        :key="record.id"
-        :id="record.id"
+        v-for="([id, _], index) in Array.from(ipStore.records.entries())"
+        :key="id"
+        :id="id"
         :displayIndex="index + 1"
       />
     </transition-group>

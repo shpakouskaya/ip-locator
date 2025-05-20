@@ -36,7 +36,6 @@ describe('IPContainer.vue', () => {
 
     container.vm.handleCloseClick()
 
-    // Проверяем, что именно IPContainer вызвал emit
     expect(container.emitted('close')).toBeTruthy()
   })
 })

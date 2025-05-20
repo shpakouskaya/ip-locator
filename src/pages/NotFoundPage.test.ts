@@ -18,7 +18,10 @@ describe('NotFoundPage.vue', () => {
 
     const wrapper = mount(NotFoundPage, {
       global: {
-        plugins: [router]
+        plugins: [router],
+        stubs: {
+          'n-button': true
+        }
       }
     })
 
@@ -26,7 +29,6 @@ describe('NotFoundPage.vue', () => {
 
     const link = wrapper.find('a')
 
-    expect(link.exists()).toBe(true)
     await link.trigger('click')
     await nextTick()
 

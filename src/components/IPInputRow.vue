@@ -16,7 +16,7 @@ const ipStore = useIPStore()
 const message = useMessage()
 let lastQueriedIp = ''
 
-const record = computed(() => ipStore.records.find((r) => r.id === props.id))
+const record = computed(() => ipStore.records.get(props.id))
 
 function handleInput(value: string) {
   const sanitized = value.replace(/[^0-9.]/g, '')
@@ -37,6 +37,7 @@ async function handleBlur() {
 
   if (!isValidIp(ip)) {
     ipStore.setResult(props.id, {
+      city: '',
       country: '',
       countryEmoji: '',
       timezone: ''
@@ -51,13 +52,14 @@ async function handleBlur() {
 
   lastQueriedIp = ip
 
-  ipStore.setError(props.id, '')
+  ipStore.setError(props.id, null)
   ipStore.setLoading(props.id, true)
 
   try {
     const result = await fetchIpLocation(ip)
     ipStore.setResult(props.id, {
       ip: result.ip,
+      city: result.city,
       country: result.country,
       countryEmoji: result.countryEmoji,
       timezone: result.timezone
@@ -65,6 +67,7 @@ async function handleBlur() {
     message.success(`IP Location for ${ip} is fetched successfully`)
   } catch {
     ipStore.setResult(props.id, {
+      city: '',
       country: '',
       countryEmoji: '',
       timezone: ''
@@ -108,9 +111,14 @@ defineExpose({
     </template>
 
     <template class="row-data" v-else>
-      <n-text v-if="record?.country" class="flag">
-        {{ record.countryEmoji }}
-      </n-text>
+      <n-tooltip v-if="record?.country" trigger="hover">
+        <template #trigger>
+          <n-text class="flag">
+            {{ record.countryEmoji }}
+          </n-text>
+        </template>
+        <span>{{ record.country }} - {{ record.city }}</span>
+      </n-tooltip>
 
       <TimezoneClock v-if="record?.timezone" :timezone="record.timezone" />
 

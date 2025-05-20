@@ -5,6 +5,7 @@ interface IpApiResponse {
   success: boolean
   message?: string
   country: string
+  city: string
   flag: {
     emoji: string
   }
@@ -16,6 +17,7 @@ interface IpApiResponse {
 export interface IpLocationResult {
   ip: string
   country: string
+  city: string
   countryEmoji: string
   timezone: string
 }
@@ -25,7 +27,7 @@ export function delay(ms: number) {
 }
 
 export async function fetchIpLocation(ip: string): Promise<IpLocationResult> {
-  const QUERIES = 'ip,success,country,flag.emoji,timezone.id'
+  const QUERIES = 'ip,success,country,city,flag.emoji,timezone.id'
   const url = `https://ipwho.is/${ip}?fields=${QUERIES}`
   const { data } = await axios.get<IpApiResponse>(url)
 
@@ -41,6 +43,7 @@ export async function fetchIpLocation(ip: string): Promise<IpLocationResult> {
   return {
     ip: data.ip,
     country: data.country,
+    city: data.city,
     countryEmoji: data.flag.emoji,
     timezone: data.timezone.id
   }
